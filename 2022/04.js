@@ -1,6 +1,6 @@
 import input from './input/04.js';
 
-function campCleanup(input) {
+function campCleanup(input, option = false) {
 	// split input into array of range pairings
 	input = input.split('\n');
 	// split each pairing into array of two ranges
@@ -16,12 +16,17 @@ function campCleanup(input) {
 			newRange.push(i);
 		}
 		return newRange;
-	})); 
-	// map to 0 or 1 if range in pair is contained within other range
-	input = input.map(pair => pair[0].every(id => pair[1].includes(id)) || pair[1].every(id => pair[0].includes(id)) ? 1 : 0);
-	// reduce input to sum of contained ranges
+	}));
+	if (option) {
+		// map to 0 or 1 if range in pair is overlaps with other range
+		input = input.map(pair => pair[0].every(id => pair[1].includes(id)) || pair[1].some(id => pair[0].includes(id)) ? 1 : 0);
+	} else {
+		// map to 0 or 1 if range in pair is fully contained within other range
+		input = input.map(pair => pair[0].every(id => pair[1].includes(id)) || pair[1].every(id => pair[0].includes(id)) ? 1 : 0);
+	}
+		// reduce input to sum of contained ranges
 	input = input.reduce((acc, curr) => acc + curr);
 	return input;
 }
 
-console.log(campCleanup(input));
+console.log(campCleanup(input, true));
