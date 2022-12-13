@@ -1,27 +1,27 @@
-//import input from './input/07.js';
-let input = `$ cd /
-$ ls
-dir a
-14848514 b.txt
-8504156 c.dat
-dir d
-$ cd a
-$ ls
-dir e
-29116 f
-2557 g
-62596 h.lst
-$ cd e
-$ ls
-584 i
-$ cd ..
-$ cd ..
-$ cd d
-$ ls
-4060174 j
-8033020 d.log
-5626152 d.ext
-7214296 k`;
+import input from './input/07.js';
+// let input = `$ cd /
+// $ ls
+// dir a
+// 14848514 b.txt
+// 8504156 c.dat
+// dir d
+// $ cd a
+// $ ls
+// dir e
+// 29116 f
+// 2557 g
+// 62596 h.lst
+// $ cd e
+// $ ls
+// 584 i
+// $ cd ..
+// $ cd ..
+// $ cd d
+// $ ls
+// 4060174 j
+// 8033020 d.log
+// 5626152 d.ext
+// 7214296 k`;
 
 // navigation object with current location
 let nav = {
@@ -101,88 +101,21 @@ function size(type) {
 size('file');
 size('dir');
 
-console.log('FILESYSTEM');
-console.dir(fs, { depth: null });
-console.log('REFERENCE');
-console.dir(refs);
-
-
-// log.forEach(line => {
-// 	// if $ (command)
-// 	if (line[0] === '$') {
-// 		// if cd (change directory)
-// 		if (line[1] === 'cd') {
-// 			// if / (root directory)
-// 			if (line[2] === '/') {
-// 				nav.path = '';
-// 			// else if .. (parent directory)
-// 			} else if (line[2] === '..') {
-// 				nav.path = nav.path.split('/');
-// 				nav.path = nav.path.slice(0,nav.path.length-1)
-// 				nav.path = nav.path.join('/');
-// 			// else (directory name)
-// 			} else {
-// 				let dir = line[2];
-// 				nav.path = `${nav.path}/${dir}`;
-// 			}
-// 		}
-// 	// else if dir (directory name)
-// 	} else if (line[0] === 'dir') {
-// 		let dir = line[1];
-// 		let path = `${nav.path}/${dir}`;
-// 		let type = 'dir';
-// 		let size = 0;
-// 		ref[path] = { type, size };
-// 		if (nav.path) {
-// 			let parent = nav.path.split('/');
-// 			parent = parent.slice(0, parent.length-1);
-// 			ref[parent][dir] = ref[dir];
-// 		} else {
-// 			fs[dir] = ref[dir];
-// 		}
-// 	// else (file)
-// 	} else {
-// 		let file = line[1];
-// 		let type = 'file'
-// 		let size = parseInt(line[0]);
-// 		ref[file] = { type, size };
-// 		if (nav.path.length) {
-// 			let parent = nav.path.slice(nav.path.length-1);
-// 			ref[parent][file] = ref[file];
-// 		} else {
-// 			fs[file] = ref[file];
-// 		}
-// 	}
-// });
-// function updateDirSize(dir) {
-// 	for (let prop in dir) {
-// 		if (prop !== 'type' && prop !== 'size') {
-// 			if (dir[prop].type === 'dir') {
-// 				updateDirSize(dir[prop]);
-// 			}
-// 			dir.size += dir[prop].size;
-// 		}
-// 	}
-// }
-// updateDirSize(fs);
-
-// let sums = [];
-// for (let prop in ref) {
-// 	if (ref[prop].type === 'dir') {
-// 		if (ref[prop].size <= 100000)
-// 			sums.push(ref[prop].size);
-// 	}
-// }
-
-// sums = sums.reduce((acc, curr) => {
-// 	if (acc + curr < 100000) {
-// 		return acc + curr;
-// 	} else {
-// 		return acc;
-// 	}
-// });
-
+// console.log('FILESYSTEM');
 // console.dir(fs, { depth: null });
-// console.dir(ref);
-// //console.dir(sums);
-// //console.log(sum);
+// console.log('REFERENCE');
+// console.dir(refs);
+
+console.log(fs);
+
+let dirs = [];
+for (let ref in refs) {
+	let size = refs[ref].info.size;
+	if (size <= 100000) {
+		dirs.push(size);
+	}
+}
+
+dirs.forEach(dir => console.log(dir));
+dirs = dirs.reduce((acc, curr) => acc + curr);
+console.log(dirs);
