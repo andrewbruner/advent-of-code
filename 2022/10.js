@@ -1,11 +1,3 @@
-// clock circuit
-	// tick/cycle
-// cpu
-	// register: x, val 1
-	// inst1: addx V 2cycles x += V
-	// inst2: noop 1cycle
-// signal strength: cycleNum * x @ 20 += 40...
-
 import Input from './input/10.js';
 
 let input = `addx 15
@@ -171,14 +163,14 @@ let sigs = cmds.map(cmd => {
 	let sigs = [ ];
 	let sig = { };
 	sig.cyc = ++cyc;
-	sig.cmd = cmd;
+	sig.cmd = arg ? `${cmd} ${arg}` : cmd;
 	sig.x = x;
 	sig.str = x * cyc;
 	sigs = [ ...sigs, sig, ];
 	if (cmd !== 'noop') {
 		let sig = { };
 		sig.cyc = ++cyc;
-		sig.cmd = arg;
+		sig.cmd = `${cmd} ${arg}`;
 		sig.x = x;
 		sig.str = x * cyc;
 		x += arg;
@@ -200,3 +192,24 @@ let tgtSigStrs = sigs.filter(sig => tgtCycs.includes(sig.cyc))
 	}));
 console.log('\n\x1b[1mTARGET CPU SIGNAL STRENGTHS\x1b[0m');
 console.table(tgtSigStrs);
+
+let crt = '';
+let crtRowBrks = [40, 80, 120, 160, 200, 240];
+let sprPos = [0, 1, 2];
+let sprPosOfs = 0;
+
+sigs.forEach((sig, idx) => {
+	if (crtRowBrks.includes(idx)) {
+		sprPosOfs = idx;
+		crt += '\n';
+	}
+	sprPos = [sig.x-1+sprPosOfs, sig.x+sprPosOfs, sig.x+1+sprPosOfs];
+	if (sprPos.includes(idx)) {
+		crt += '#';
+	} else {
+		crt += '.';
+	}
+});
+
+console.log('\n\x1b[1mCRT DISPLAY\x1b[0m')
+console.log(crt);
