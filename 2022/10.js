@@ -157,11 +157,10 @@ noop`;
 
 let cmds = Input.split('\n')
 	.map(cmd => cmd === 'noop' ? [cmd] : cmd.split(' '))
-	.map(cmd => cmd[0] === 'noop' ? { cmd: cmd[0] } : { cmd: cmd[0], arg: +cmd[1] });
+	.map(cmd => cmd[0] === 'noop' ? { cmd: cmd[0], } : { cmd: cmd[0], arg: +cmd[1], });
 
-console.group('COMMAND LOG');
+console.log('\n\x1b[1mCOMMAND LOG\x1b[0m');
 console.table(cmds);
-console.groupEnd();
 
 let x = 1;
 let cyc = 0;
@@ -175,7 +174,7 @@ let sigs = cmds.map(cmd => {
 	sig.cmd = cmd;
 	sig.x = x;
 	sig.str = x * cyc;
-	sigs = [...sigs, sig];
+	sigs = [ ...sigs, sig, ];
 	if (cmd !== 'noop') {
 		let sig = { };
 		sig.cyc = ++cyc;
@@ -183,16 +182,21 @@ let sigs = cmds.map(cmd => {
 		sig.x = x;
 		sig.str = x * cyc;
 		x += arg;
-		sigs = [...sigs, sig];
+		sigs = [ ...sigs, sig, ];
 	}
 	return sigs;
 }).flat();
 
-console.group('CPU SIGNALS');
+console.log('\n\x1b[1mCPU SIGNALS\x1b[0m');
 console.table(sigs);
-console.groupEnd();
 
-let tgtCycs = [20, 60, 100, 140, 180, 220];
-let sigStrSum = sigs.reduce((acc, curr) => tgtCycs.includes(curr.cyc) ? curr.str + acc : 0 + acc, 0);
-
-console.log(`The signal strength sum (sigStrSum) for target cycles (tgtCycs) [${tgtCycs.join(', ')}] is \x1b[32m${sigStrSum}`);
+let tgtCycs = [ 20, 60, 100, 140, 180, 220, ];
+let tgtSigStrs = sigs.filter(sig => tgtCycs.includes(sig.cyc))
+	.map((sig, idx, arr) => ({
+		cyc: sig.cyc,
+		x: sig.x,
+		str: sig.str,
+		tot: arr.reduce((acc, curr, currIdx) => currIdx <= idx ? curr.str + acc : acc, 0),
+	}));
+console.log('\n\x1b[1mTARGET CPU SIGNAL STRENGTHS\x1b[0m');
+console.table(tgtSigStrs);
