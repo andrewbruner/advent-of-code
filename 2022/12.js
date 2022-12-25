@@ -8,6 +8,7 @@ let input = exampleInput;
 // tgtPos = E = z
 // nextPos <= currPos + 1 
 
+// Find starting coordinates
 function determineStartingCoordinates(input) {
 	let coordinates;
 	input.split('\n')
@@ -26,6 +27,7 @@ function determineStartingCoordinates(input) {
 
 let startingCoordinates = determineStartingCoordinates(input);
 
+// Find ending coordinates
 function determineEndingCoordinates(input) {
 	let coordinates;
 	input.split('\n')
@@ -44,6 +46,7 @@ function determineEndingCoordinates(input) {
 
 let endingCoordinates = determineEndingCoordinates(input);
 
+// Helper function to convert elevation letter to corresponding number
 function convertElevationFromLetterToNumber(letter) {
 	let letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',];
 	if (letter === 'S') {
@@ -55,6 +58,7 @@ function convertElevationFromLetterToNumber(letter) {
 	}
 };
 
+// Construct heightmap (array of objects)
 let heightmap = input.split('\n');
 heightmap = heightmap.map(xAxis => xAxis.split(''));
 heightmap = heightmap.map(xAxis => xAxis.map(elevation => {
