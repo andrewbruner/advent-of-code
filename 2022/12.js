@@ -76,6 +76,17 @@ heightmap = heightmap.map((xAxis, yIndex, array) => xAxis.map((position, xCoordi
 		},
 	};
 }));
+heightmap = heightmap.map((xAxis, yIndex, array) => xAxis.map((position, xCoordinate) => {
+	let adjacentPositions = { };
+	adjacentPositions.north = yIndex > 0 ? array[yIndex - 1][xCoordinate] : null;
+	adjacentPositions.east = xCoordinate < xAxis.length - 1 ? xAxis[xCoordinate + 1] : null;
+	adjacentPositions.south = yIndex < array.length - 1 ? array[yIndex + 1][xCoordinate] : null;
+	adjacentPositions.west = xCoordinate > 0 ? xAxis[xCoordinate - 1] : null;
+	return {
+		...position,
+		adjacentPositions,
+	};
+}));
 
 console.log(`Heightmap:`);
 console.dir(heightmap, { depth: null });
@@ -83,3 +94,17 @@ console.log(`Starting Coordinates:`);
 console.dir(startingCoordinates);
 console.log(`Ending Coordinates:`);
 console.dir(endingCoordinates);
+
+// Find starting position
+let startingPosition = heightmap.find(xAxis => {
+	return xAxis.find(position => {
+		return position.coordinates.x === startingCoordinates.x
+			&& position.coordinates.y === startingCoordinates.y;
+	});
+})
+	.find(position => {
+		return position.coordinates.x === startingCoordinates.x
+			&& position.coordinates.y === startingCoordinates.y;
+	});
+
+console.dir(startingPosition);
