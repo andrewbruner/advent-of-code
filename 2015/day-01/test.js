@@ -1,5 +1,5 @@
-export default function(func) {
-	let tests = [
+export default function(func, isPartOne) {
+	const partOneTests = [
 		{ name: 'test01', input: `(())`, target: 0, },
 		{ name: 'test02', input: `()()`, target: 0, },
 		{ name: 'test03', input: `(((`, target: 3, },
@@ -11,10 +11,15 @@ export default function(func) {
 		{ name: 'test09', input: `)())())`, target: -3, },
 	];
 
-	function run(tests) {
+	const partTwoTests = [
+		{ name: 'test01', input: `)`, target: 1, },
+		{ name: 'test02', input: `()())`, target: 5, },
+	];
+
+	function run(tests, isPartOne) {
 		for (let i = 0; i < tests.length; i++) {
 			const { name, input, target, } = tests[i];
-			const result = func(input,);
+			const result = func(input, isPartOne);
 			if (result !== target) {
 				console.error(`${name} failed: input ${input} expected to return ${target} but returned ${result}`);
 			} else {
@@ -23,5 +28,9 @@ export default function(func) {
 		}
 	}
 
-	run(tests);
+	if (isPartOne) {
+		run(partOneTests);
+	} else {
+		run(partTwoTests, false);
+	}
 };
