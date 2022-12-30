@@ -1,26 +1,20 @@
 import input from './input.js';
-import test from './test.js';
 
-function followInstructions(instructions, isPartOne = true) {
+function dayOne(input) {
 	let floor = 0;
-	for (let i = 0; i < instructions.length; i++) {
-		if (instructions[i] === '(') {
+	let position = 0;
+	for (let i = 0; i < input.length; i++) {
+		if (input[i] === '(') {
 			floor++;
 		} else {
 			floor--;
-			if (!isPartOne && floor < 0) {
-				const position = i + 1;
-				return position;
+			if (floor < 0 && position < 1) {
+				position += i + 1;
 			}
 		}
 	}
-	return floor;
-}
+	return { floor, position };
+};
 
-test(followInstructions);
-const floor = followInstructions(input);
-console.log(floor);
-
-test(followInstructions, false);
-const position = followInstructions(input, false);
-console.log(position);
+const { floor, position } = dayOne(input);
+console.log(floor, position);
