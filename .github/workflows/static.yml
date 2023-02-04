@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload 2022 directory
-          path: './2022'
+          path: '2022'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
