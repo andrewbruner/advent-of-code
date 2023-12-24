@@ -41,4 +41,72 @@ for (let number in partNumbers) {
 	sum = sum + +partNumbers[number].value;
 }
 
-console.log(sum);
+// console.log(sum);
+
+let gears = [];
+let gearRatios = [];
+let gearRatioSum = 0;
+
+for (let _id in schematic) {
+	let gear = schematic[_id];
+	if (gear.type === 'symbol') {
+		let [gearX, gearY] = gear.mainCoords;		
+		let top = schematic[`${gearX}-${gearY-1}`];
+		let topRight = schematic[`${gearX+1}-${gearY-1}`];
+		let right = schematic[`${gearX+1}-${gearY}`];
+		let bottomRight = schematic[`${gearX+1}-${gearY+1}`];
+		let bottom = schematic[`${gearX}-${gearY+1}`];
+		let bottomLeft = schematic[`${gearX-1}-${gearY+1}`];
+		let left = schematic[`${gearX-1}-${gearY}`];
+		let topLeft = schematic[`${gearX-1}-${gearY-1}`];
+		let adjacentPartNumbers = [];
+		let uniquePartNumberIds = [];
+
+		if (top?.type === 'number') {
+			adjacentPartNumbers = [...adjacentPartNumbers, top];
+		}
+		if (topRight?.type === 'number') {
+			adjacentPartNumbers = [...adjacentPartNumbers, topRight];
+		}
+		if (right?.type === 'number') {
+			adjacentPartNumbers = [...adjacentPartNumbers, right];
+		}
+		if (bottomRight?.type === 'number') {
+			adjacentPartNumbers = [...adjacentPartNumbers, bottomRight];
+		}
+		if (bottom?.type === 'number') {
+			adjacentPartNumbers = [...adjacentPartNumbers, bottom];
+		}
+		if (bottomLeft?.type === 'number') {
+			adjacentPartNumbers = [...adjacentPartNumbers, bottomLeft];
+		}
+		if (left?.type === 'number') {
+			adjacentPartNumbers = [...adjacentPartNumbers, left];
+		}
+		if (topLeft?.type === 'number') {
+			adjacentPartNumbers = [...adjacentPartNumbers, topLeft];
+		}
+		adjacentPartNumbers.forEach(partNumber => {
+			if (!uniquePartNumberIds.includes(partNumber.id)) {
+				uniquePartNumberIds = [...uniquePartNumberIds, partNumber.id];
+			}
+		});
+		if (uniquePartNumberIds.length === 2) {
+			gears = [...gears, { gear, uniquePartNumberIds }];
+		}
+	}
+}
+
+// console.dir(gears, { depth: null });
+
+gears.forEach(gear => {
+	let partValues = [schematic[gear.uniquePartNumberIds[0]].value, schematic[gear.uniquePartNumberIds[1]].value];
+	let gearRatio = partValues[0] * partValues[1];
+	gearRatios = [...gearRatios, gearRatio];
+});
+
+// console.log(gearRatios);
+
+gearRatioSum = gearRatios.reduce((acc, curr) => acc + curr);
+
+console.log(gearRatioSum);
