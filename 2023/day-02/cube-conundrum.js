@@ -52,11 +52,68 @@ function partOne() {
 		gamesPossibleIdsSum += id;
 	});
 
-	console.log(gamesPossibleIdsSum);
+	// console.log(gamesPossibleIdsSum);
 }
 
 partOne();
 
-function partTwo() {}
+function partTwo() {
+	// console.dir(games, { depth:null });
+
+	// find the minimumCubes of all games
+	let minimumCubes = [];
+	
+	games.forEach(game => {
+		let rounds = game[1];
+		let minimumRed;
+		let minimumGreen;
+		let minimumBlue;
+
+		rounds.forEach(round => {
+			round.forEach(die => {
+				let number = die[0];
+				let color = die[1];
+
+				if (color === 'red' && (number > minimumRed || minimumRed === undefined)) {
+					minimumRed = number;
+				}
+				if (color === 'green' && (number > minimumGreen || minimumGreen === undefined)) {
+					minimumGreen = number;
+				}
+				if (color === 'blue' && (number > minimumBlue || minimumBlue === undefined)) {
+					minimumBlue = number;
+				}
+			});
+		});
+
+		minimumCubes.push([minimumRed, minimumGreen, minimumBlue]);
+	});
+
+	// console.dir(minimumCubes, { depth: null });
+
+	// find the powers of each game's set of cubes
+	let powers = [];
+
+	minimumCubes.forEach(cubes => {
+		let red = cubes[0];
+		let green = cubes[1];
+		let blue = cubes[2];
+		let power = red * green * blue;
+
+		powers.push(power);
+	});
+
+	// console.log(powers);
+
+	// find the powersSum of all games' sets of cubes
+
+	let powersSum = 0;
+
+	powers.forEach(power => {
+		powersSum += power;
+	});
+
+	console.log(powersSum);
+}
 
 partTwo();
